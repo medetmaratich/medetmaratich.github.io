@@ -1,0 +1,553 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Медет Маратович — IT AI Инженер</title>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;600;800&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #e63946;
+            --secondary: #457b9d;
+            --accent: #f1faee;
+            --dark: #0d1b2a;
+            --light: #f1faee;
+            --gray: #778da9;
+        }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        html {
+            scroll-behavior: smooth;
+        }
+        body {
+            font-family: 'Manrope', sans-serif;
+            color: var(--light);
+            background: var(--dark);
+            line-height: 1.8;
+            overflow-x: hidden;
+        }
+
+        /* Фоновое видео */
+        .bg-video {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            z-index: -2;
+            overflow: hidden;
+        }
+        .bg-video video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            filter: brightness(0.35) contrast(1.3);
+            transform: scale(1.1);
+        }
+        .bg-overlay {
+            position: absolute;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: linear-gradient(135deg, rgba(13,27,42,0.9) 0%, rgba(230,57,70,0.15) 100%);
+            z-index: -1;
+        }
+
+        /* Языковой переключатель — справа */
+        .lang-switch {
+            position: fixed;
+            top: 1.5rem;
+            right: 6%;
+            display: flex;
+            gap: 0.4rem;
+            background: rgba(255,255,255,0.08);
+            padding: 0.35rem;
+            border-radius: 50px;
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255,255,255,0.1);
+            z-index: 1000;
+        }
+        .lang-btn {
+            padding: 0.5rem 1rem;
+            border: none;
+            background: transparent;
+            color: var(--light);
+            font-weight: 600;
+            font-size: 0.9rem;
+            cursor: pointer;
+            border-radius: 50px;
+            transition: all 0.35s ease;
+        }
+        .lang-btn.active {
+            background: var(--primary);
+            color: white;
+            box-shadow: 0 4px 15px rgba(230,57,70,0.3);
+        }
+
+        /* Hero */
+        .hero {
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 0 6%;
+            position: relative;
+        }
+        .hero h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: 5.5rem;
+            margin-bottom: 1.2rem;
+            line-height: 1.1;
+            opacity: 0;
+            transform: translateY(40px);
+            animation: fadeUp 1.2s ease-out forwards;
+        }
+        .hero .subtitle {
+            font-size: 1.7rem;
+            margin-bottom: 2.5rem;
+            opacity: 0;
+            transform: translateY(30px);
+            animation: fadeUp 1.2s ease-out 0.4s forwards;
+            color: rgba(241,250,238,0.85);
+            font-weight: 300;
+        }
+        .hero .cta {
+            opacity: 0;
+            transform: translateY(20px);
+            animation: fadeUp 1.2s ease-out 0.8s forwards;
+        }
+        .btn {
+            display: inline-block;
+            padding: 1rem 2.8rem;
+            background: var(--primary);
+            color: white;
+            text-decoration: none;
+            border-radius: 50px;
+            font-weight: 700;
+            font-size: 1.1rem;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 12px 30px rgba(230,57,70,0.35);
+            position: relative;
+            overflow: hidden;
+        }
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 0; left: -100%;
+            width: 100%; height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transition: 0.6s;
+        }
+        .btn:hover::before {
+            left: 100%;
+        }
+        .btn:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 18px 40px rgba(230,57,70,0.45);
+            background: #d62839;
+        }
+        @keyframes fadeUp {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Контейнер */
+        .container {
+            max-width: 1300px;
+            margin: 0 auto;
+            padding: 0 6%;
+        }
+        section {
+            padding: 120px 0;
+            opacity: 0;
+            transform: translateY(60px);
+            transition: all 1s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        section.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        .section-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 3.8rem;
+            text-align: center;
+            margin-bottom: 4rem;
+            position: relative;
+            color: var(--light);
+        }
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: -18px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100px;
+            height: 4px;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            border-radius: 2px;
+        }
+
+        /* Биография */
+        .bio-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 5rem;
+            align-items: center;
+        }
+        .bio-text h3 {
+            font-size: 2.2rem;
+            margin-bottom: 1.8rem;
+            color: var(--primary);
+            font-weight: 800;
+        }
+        .bio-text p {
+            margin-bottom: 1.8rem;
+            font-size: 1.15rem;
+            color: rgba(241,250,238,0.9);
+        }
+        .bio-image {
+            position: relative;
+            border-radius: 24px;
+            overflow: hidden;
+            box-shadow: 0 25px 50px rgba(0,0,0,0.4);
+            transition: all 0.6s ease;
+        }
+        .bio-image:hover {
+            transform: translateY(-12px);
+            box-shadow: 0 35px 70px rgba(0,0,0,0.5);
+        }
+        .bio-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.6s ease;
+        }
+        .bio-image:hover img {
+            transform: scale(1.12);
+        }
+
+        /* Интересы */
+        .interests-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 2rem;
+            margin-top: 4rem;
+        }
+        .interest-card {
+            text-align: center;
+            padding: 1.5rem;
+            background: rgba(255,255,255,0.05);
+            border-radius: 20px;
+            transition: all 0.4s ease;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+        .interest-card:hover {
+            transform: translateY(-10px);
+            background: rgba(255,255,255,0.1);
+            box-shadow: 0 15px 30px rgba(0,0,0,0.2);
+        }
+        .interest-card i {
+            font-size: 3rem;
+            color: var(--primary);
+            margin-bottom: 1rem;
+        }
+        .interest-card h4 {
+            font-size: 1.1rem;
+            margin-bottom: 0.5rem;
+        }
+        .interest-card p {
+            font-size: 0.9rem;
+            color: rgba(241,250,238,0.7);
+        }
+
+        /* Футер */
+        footer {
+            background: rgba(13,27,42,0.98);
+            padding: 4rem 0 2rem;
+            text-align: center;
+            border-top: 1px solid rgba(255,255,255,0.08);
+        }
+        .social-links {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+        }
+        .social-links a {
+            width: 58px;
+            height: 58px;
+            background: rgba(255,255,255,0.08);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--light);
+            font-size: 1.5rem;
+            transition: all 0.4s ease;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+        .social-links a:hover {
+            background: var(--primary);
+            transform: translateY(-8px) scale(1.1);
+            border-color: transparent;
+            box-shadow: 0 12px 25px rgba(230,57,70,0.3);
+        }
+
+        /* Адаптивность */
+        @media (max-width: 992px) {
+            .hero h1 { font-size: 4.2rem; }
+            .bio-grid { grid-template-columns: 1fr; }
+            .section-title { font-size: 3.2rem; }
+        }
+        @media (max-width: 768px) {
+            .hero h1 { font-size: 3.5rem; }
+            .hero .subtitle { font-size: 1.4rem; }
+            .lang-switch { right: 4%; top: 1rem; }
+            nav { padding: 1rem 4%; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Фоновое видео -->
+    <div class="bg-video">
+        <video autoplay muted loop playsinline>
+            <source src="https://assets.mixkit.co/videos/preview/mixkit-abstract-video-of-city-lights-at-night-3608-large.mp4" type="video/mp4">
+            Your browser does not support the video tag.
+        </video>
+        <div class="bg-overlay"></div>
+    </div>
+
+    <!-- Языковой переключатель -->
+    <div class="lang-switch">
+        <button class="lang-btn active" onclick="changeLanguage('ru')">RU</button>
+        <button class="lang-btn" onclick="changeLanguage('en')">EN</button>
+        <button class="lang-btn" onclick="changeLanguage('kz')">KZ</button>
+    </div>
+
+    <!-- Hero -->
+    <section class="hero">
+        <h1 data-lang="ru">Привет, я Медет Маратович</h1>
+        <h1 data-lang="en" style="display: none;">Hi, I'm Medet Maratich</h1>
+        <h1 data-lang="kz" style="display: none;">Сәлем, мен Медет Маратұлы</h1>
+       
+        <p class="subtitle" data-lang="ru">IT AI Инженер / Web Разработчик</p>
+        <p class="subtitle" data-lang="en" style="display: none;">IT AI Engineer / Web Developer</p>
+        <p class="subtitle" data-lang="kz" style="display: none;">IT AI Инженері / Веб Әзірлеуші</p>
+       
+        <a href="C:\Users\mtmar\OneDrive\Рабочий стол\Maratich\Проекты\Maratich\full.html" class="btn cta" data-lang="ru">Узнать больше</a>
+        <a href="C:\Users\mtmar\OneDrive\Рабочий стол\Maratich\Проекты\Maratich\full.html" class="btn cta" data-lang="en" style="display: none;">Learn more</a>
+        <a href="C:\Users\mtmar\OneDrive\Рабочий стол\Maratich\Проекты\Maratich\full.html" class="btn cta" data-lang="kz" style="display: none;">Толығырақ</a>
+    </section>
+
+    <!-- Биография -->
+    <section id="bio">
+        <div class="container">
+            <h2 class="section-title" data-lang="ru">Обо мне</h2>
+            <h2 class="section-title" data-lang="en" style="display: none;">About Me</h2>
+            <h2 class="section-title" data-lang="kz" style="display: none;">Мен туралы</h2>
+           
+            <div class="bio-grid">
+                <div class="bio-text">
+                    <h3 data-lang="ru">Моя история</h3>
+                    <h3 data-lang="en" style="display: none;">My Story</h3>
+                    <h3 data-lang="kz" style="display: none;">Менің тарихым</h3>
+                   
+                    <p data-lang="ru">Я — Медет Маратович, инженер, разработчик, кинематографический аниматор и создатель контента.</p>
+                    <p data-lang="en" style="display: none;">I am Medet Maratich, engineer, developer, cinematic animator and content creator.</p>
+                    <p data-lang="kz" style="display: none;">Мен — Медет Маратұлы, инженер, әзірлеуші, кинематографикалық аниматор және контент жасаушы.</p>
+                   
+                    <p data-lang="ru">Моя страсть — объединять технологии и творчество, создавая проекты, которые вдохновляют, обучают и заставляют смотреть на привычные вещи по-новому.</p>
+                    <p data-lang="en" style="display: none;">My passion is combining technology and creativity to build projects that inspire, educate, and make people see familiar things in a new light.</p>
+                    <p data-lang="kz" style="display: none;">Менің құмарлығым — технология мен шығармашылықты біріктіріп, шабыттандыратын, оқытатын және таныс заттарды жаңаша көруге мәжбүр ететін жобалар жасау.</p>
+                   
+                    <p data-lang="ru">За последние годы я работал над множеством собственных и совместных проектов — от умных инженерных систем и Arduino-моделей до музыкальных и визуальных идей под псевдонимом Medet Maratich.</p>
+                    <p data-lang="en" style="display: none;">Over the years, I've worked on numerous personal and collaborative projects — from smart engineering systems and Arduino models to musical and visual ideas under the pseudonym Medet Maratich.</p>
+                    <p data-lang="kz" style="display: none;">Соңғы жылдары мен көптеген жеке және бірлескен жобаларда жұмыс істедім — ақылды инженерлік жүйелер мен Arduino модельдерінен бастап, Medet Maratich бүркеншік атымен музыкалық және визуалды идеяларға дейін.</p>
+                   
+                    <p data-lang="ru">Моя главная цель — не просто показать результат, а передать вдохновение и мотивировать других идти своим путём.</p>
+                    <p data-lang="en" style="display: none;">My plan the main goal is not just to show the result, but to pass on inspiration and motivate others to follow their own path.</p>
+                    <p data-lang="kz" style="display: none;">Менің басты мақсатым — нәтижені ғана емес, шабытты жеткізу және басқаларды өз жолымен жүруіне ынталандыру.</p>
+                </div>
+               
+                <div class="bio-image">
+                    <img src="C:\Users\mtmar\OneDrive\Рабочий стол\Maratich\Проекты\Maratich\content.png" alt="Медет Маратович">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Интересы -->
+    <section id="interests">
+        <div class="container">
+            <h2 class="section-title" data-lang="ru">Мои интересы</h2>
+            <h2 class="section-title" data-lang="en" style="display: none;">My Interests</h2>
+            <h2 class="section-title" data-lang="kz" style="display: none;">Менің қызығушылықтарым</h2>
+           
+            <div class="interests-grid">
+                <div class="interest-card">
+                    <i class="fas fa-microchip"></i>
+                    <h4 data-lang="ru">AI & ML</h4>
+                    <h4 data-lang="en" style="display: none;">AI & ML</h4>
+                    <h4 data-lang="kz" style="display: none;">AI & ML</h4>
+                    <p data-lang="ru">Искусственный интеллект</p>
+                    <p data-lang="en" style="display: none;">Artificial Intelligence</p>
+                    <p data-lang="kz" style="display: none;">Жасанды интеллект</p>
+                </div>
+                <div class="interest-card">
+                    <i class="fas fa-laptop-code"></i>
+                    <h4 data-lang="ru">Web Dev</h4>
+                    <h4 data-lang="en" style="display: none;">Web Dev</h4>
+                    <h4 data-lang="kz" style="display: none;">Web Dev</h4>
+                    <p data-lang="ru">Frontend & Backend</p>
+                    <p data-lang="en" style="display: none;">Frontend & Backend</p>
+                    <p data-lang="kz" style="display: none;">Frontend & Backend</p>
+                </div>
+                <div class="interest-card">
+                    <i class="fas fa-robot"></i>
+                    <h4 data-lang="ru">Arduino</h4>
+                    <h4 data-lang="en" style="display: none;">Arduino</h4>
+                    <h4 data-lang="kz" style="display: none;">Arduino</h4>
+                    <p data-lang="ru">Automatization</p>
+                    <p data-lang="en" style="display: none;">Automatization</p>
+                    <p data-lang="kz" style="display: none;">Automatization</p>
+                </div>
+                <div class="interest-card">
+                    <i class="fas fa-video"></i>
+                    <h4 data-lang="ru">Видеография</h4>
+                    <h4 data-lang="en" style="display: none;">Videography</h4>
+                    <h4 data-lang="kz" style="display: none;">Видеография</h4>
+                    <p data-lang="ru">Контент и монтаж</p>
+                    <p data-lang="en" style="display: none;">Content & Editing</p>
+                    <p data-lang="kz" style="display: none;">Контент және монтаж</p>
+                </div>
+                <div class="interest-card">
+                    <i class="fas fa-cogs"></i>
+                    <h4 data-lang="ru">Engineer</h4>
+                    <h4 data-lang="en" style="display: none;">Engineer</h4>
+                    <h4 data-lang="kz" style="display: none;">Инженер</h4>
+                    <p data-lang="ru">Создаю умные системы и автоматизацию</p>
+                    <p data-lang="en" style="display: none;">Building smart systems & automation</p>
+                    <p data-lang="kz" style="display: none;">Ақылды жүйелер мен автоматтандыруды жасаймын</p>
+                </div>
+                <div class="interest-card">
+                    <i class="fas fa-film"></i>
+                    <h4 data-lang="ru">Cinematic Animator</h4>
+                    <h4 data-lang="en" style="display: none;">Cinematic Animator</h4>
+                    <h4 data-lang="kz" style="display: none;">Кино Аниматор</h4>
+                    <p data-lang="ru">Оживляю истории через движение и свет</p>
+                    <p data-lang="en" style="display: none;">Bringing stories to life with motion & light</p>
+                    <p data-lang="kz" style="display: none;">Қозғалыс пен жарық арқылы әңгімелерді тірілтемін</p>
+                </div>
+                <div class="interest-card">
+                    <i class="fas fa-hand-sparkles"></i>
+                    <h4 data-lang="ru">Silent Crafter</h4>
+                    <h4 data-lang="en" style="display: none;">Silent Crafter</h4>
+                    <h4 data-lang="kz" style="display: none;">Тыныш Шебер</h4>
+                    <p data-lang="ru">Творю в тишине, где рождаются идеи</p>
+                    <p data-lang="en" style="display: none;">Creating in silence — where ideas are born</p>
+                    <p data-lang="kz" style="display: none;">Тыныштықта жасаймын — идеялар дүниеге келеді</p>
+                </div>
+                <div class="interest-card">
+                    <i class="fas fa-briefcase"></i>
+                    <h4 data-lang="ru">Business Man</h4>
+                    <h4 data-lang="en" style="display: none;">Business Man</h4>
+                    <h4 data-lang="kz" style="display: none;">Бизнесмен</h4>
+                    <p data-lang="ru">Монетизирую идеи и строю проекты</p>
+                    <p data-lang="en" style="display: none;">Monetizing ideas & building ventures</p>
+                    <p data-lang="kz" style="display: none;">Идеяларды монетизациялау және жобалар құру</p>
+                </div>
+                <div class="interest-card">
+                    <i class="fas fa-palette"></i>
+                    <h4 data-lang="ru">Творчество</h4>
+                    <h4 data-lang="en" style="display: none;">Creativity</h4>
+                    <h4 data-lang="kz" style="display: none;">Шығармашылық</h4>
+                    <p data-lang="ru">Музыка, видео, дизайн — всё в одном</p>
+                    <p data-lang="en" style="display: none;">Music, video, design — all in one</p>
+                    <p data-lang="kz" style="display: none;">Музыка, видео, дизайн — бәрі бір</p>
+                </div>
+                <div class="interest-card">
+                    <i class="fas fa-ellipsis-h"></i>
+                    <h4 data-lang="ru">Другие</h4>
+                    <h4 data-lang="en" style="display: none;">Others</h4>
+                    <h4 data-lang="kz" style="display: none;">Басқалар</h4>
+                    <p data-lang="ru">Философия, книги, саморазвитие</p>
+                    <p data-lang="en" style="display: none;">Philosophy, books, self-growth</p>
+                    <p data-lang="kz" style="display: none;">Философия, кітаптар, өзін-өзі дамыту</p>
+                </div>
+           </div>
+    </div>
+</section>
+
+    <!-- Футер -->
+    <footer>
+        <div class="container">
+            <div class="social-links">
+                <a href="https://www.youtube.com/channel/UCvryj0rAh32Cs_sjw6-aomQ" target="_blank"><i class="fab fa-youtube"></i></a>
+                <a href="https://www.instagram.com/maratsson?igsh=MTMzeWw1NG85MGRpbg==" target="_blank"><i class="fab fa-instagram"></i></a>
+                <a href="https://vk.com/id732366290" target="_blank"><i class="fab fa-vk"></i></a>
+                <a href="https://www.linkedin.com/in/medet-maratich-b796b1390/" target="_blank"><i class="fab fa-linkedin"></i></a>
+                <a href="https://web.telegram.org/a/#7249924347" target="_blank"><i class="fab fa-telegram"></i></a>
+            </div>
+            <p data-lang="ru">© 2025 Медет Маратович. Все права защищены.</p>
+            <p data-lang="en" style="display: none;">© 2025 Medet Maratich. All rights reserved.</p>
+            <p data-lang="kz" style="display: none;">© 2025 Медет Маратұлы. Барлық құқықтар қорғалған.</p>
+        </div>
+    </footer>
+
+    <script>
+        function changeLanguage(lang) {
+            document.querySelectorAll('[data-lang]').forEach(el => {
+                el.style.display = 'none';
+            });
+            document.querySelectorAll(`[data-lang="${lang}"]`).forEach(el => {
+                el.style.display = 'block';
+            });
+            document.documentElement.lang = lang;
+           
+            document.querySelectorAll('.lang-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            const activeBtn = document.querySelector(`.lang-btn[onclick="changeLanguage('${lang}')"]`);
+            if (activeBtn) activeBtn.classList.add('active');
+        }
+
+        window.addEventListener('scroll', () => {
+            const nav = document.querySelector('nav');
+            if (window.scrollY > 100) {
+                nav.classList.add('scrolled');
+            } else {
+                nav.classList.remove('scrolled');
+            }
+
+            document.querySelectorAll('section').forEach(section => {
+                const rect = section.getBoundingClientRect();
+                if (rect.top < window.innerHeight * 0.75) {
+                    section.classList.add('visible');
+                }
+            });
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            changeLanguage('ru');
+            setTimeout(() => {
+                document.querySelectorAll('section').forEach((section, i) => {
+                    setTimeout(() => {
+                        if (section.getBoundingClientRect().top < window.innerHeight) {
+                            section.classList.add('visible');
+                        }
+                    }, i * 300);
+                });
+            }, 600);
+        });
+    </script>
+</body>
+</html>
